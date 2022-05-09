@@ -3,21 +3,20 @@ import time
 import pymongo
 import datetime
 import asyncio
+from typing import TypedDict
+from pymongo.collection import Collection
+
+class Person(TypedDict):
+    firstname: str
+    lastname: str
+    created_at: str
+    updated_at: str
 
 class DBManager:
     def __init__(self):
         self.dataBaseName = "test"
 
     def run(self):
-        #Get the mongo client from default port and ip
-        client = pymongo.MongoClient()
-
-        #Check if the db exist
-        if self.dataBaseName in client.list_database_names():
-            print("Retrieving the database")
-        else:
-            print("Creating the database")
-
         #Add a person
         personne = Personne(firstname="Peter", lastname="Pen")
 
@@ -81,7 +80,7 @@ class DBManager:
         Personne.DB.drop()
 
 class Personne:
-    DB = pymongo.MongoClient()["test"]["Personnes"]
+    DB: Collection[Person] = pymongo.MongoClient()["test"]["Personnes"]
 
     def __init__(self, firstname=None, lastname=None, isCreated=False):
         self.firstname = firstname
@@ -141,8 +140,6 @@ class Personne:
     @staticmethod
     def insert_many(dict):
         Personne.DB.insert_many(dict)
-
-
 
 dbManager = DBManager()
 dbManager.run()
