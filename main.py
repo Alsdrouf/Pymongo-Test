@@ -25,14 +25,14 @@ class DBManager:
         personnes = testDB["personnes"]
 
         #Add a person
-        timestamp = datetime.datetime.now()
+        timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         personne = { "firstname" : "Peter", "lastname" : "Pen", "created_at" : timestamp, "updated_at" : timestamp }
 
         id = personnes.insert_one(personne).inserted_id
         print(id)
 
         #Add persons
-        timestamp = datetime.datetime.now()
+        timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         dictPersonnes = [
             {"firstname": "Jack", "lastname": "Sparrow", "created_at": timestamp, "updated_at": timestamp},
             {"firstname": "Orelsan", "lastname": "", "created_at": timestamp, "updated_at": timestamp},
@@ -74,22 +74,15 @@ class DBManager:
         print("Deleted " + str(count) + " personnes")
 
         #update the person
-        timestamp = datetime.datetime.now()
+        timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         personne = {"firstname": "Peter", "lastname": "Pen", "created_at": timestamp, "updated_at": timestamp}
 
         id = personnes.insert_one(personne).inserted_id
         print(id)
 
-        personne = personnes.update_one({ "_id" : id }, { "$set" : { "lastname" : "Pan" } })
+        personnes.update_one({ "_id" : id }, { "$set" : { "lastname" : "Pan" } })
 
         personnes.drop()
-
-
-
-
-
-
-
 
 dbManager = DBManager()
 dbManager.run()
